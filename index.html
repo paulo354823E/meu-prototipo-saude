@@ -10,9 +10,9 @@
     <!-- Application Structure Plan: A single-page, scrollable dashboard/hub design that acts as an interactive prototype for the mobile app concept. The structure flows from a general introduction (Home) to specific features (Campaign, Habit Tracker, Quiz, Events, Help), mimicking an app's user journey. A sticky navigation bar with smooth scrolling allows easy access to all sections. This structure was chosen to make the abstract proposal tangible and allow stakeholders to 'feel' the app's core ideas in a dynamic, easy-to-understand web format. -->
     <!-- Visualization & Content Choices: 
         - Report Info: Monthly Health Campaigns -> Goal: Inform/Explore -> Viz/Method: Interactive content block with a month selector. -> Interaction: Clicking a month (HTML buttons) uses JS to dynamically change the section's theme color, title, and descriptive text. -> Justification: This is the core concept of the app, and making it interactive is crucial for demonstrating the dynamic, thematic nature.
-        - Report Info: Habit Tracker -> Goal: Demonstrate Functionality -> Viz/Method: Chart.js Donut Chart for water intake, simple counters for other habits. -> Interaction: JS-powered '+' and '-' buttons update the chart and text values in real-time. -> Justification: Visually represents the tracking feature, making it more engaging and understandable than a static description. Library: Chart.js (Canvas).
-        - Report Info: Interactive Quiz -> Goal: Demonstrate Interactivity -> Viz/Method: Styled HTML buttons for multiple-choice answers. -> Interaction: JS adds 'correct'/'incorrect' CSS classes on click and reveals a feedback message. -> Justification: A simple yet effective way to prototype the quiz feature without backend logic.
-        - Report Info: Calendar/Support -> Goal: Organize/Inform -> Viz/Method: Clean layouts using Tailwind CSS Grid and Flexbox. -> Interaction: None needed, focus is on clear, readable presentation of information. -> Justification: For static information, a clean and well-organized layout is the most effective presentation.
+        - Report Info: Habit Tracker (Water Only) -> Goal: Demonstrate Functionality -> Viz/Method: Chart.js Donut Chart for water intake. -> Interaction: JS-powered '+' and '-' buttons update the chart and text values in real-time. -> Justification: Visually represents the tracking feature. Library: Chart.js (Canvas).
+        - Report Info: Interactive Quiz -> Goal: Demonstrate Interactivity -> Viz/Method: Styled HTML buttons for multiple-choice answers. -> Interaction: JS adds 'correct'/'incorrect' CSS classes on click and reveals a feedback message. -> Justification: A simple yet effective way to prototype the quiz feature.
+        - Report Info: Calendar/Support -> Goal: Organize/Inform -> Viz/Method: Clean layouts using Tailwind CSS Grid and Flexbox. -> Interaction: None needed, focus is on clear, readable presentation of information.
     -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
@@ -23,23 +23,23 @@
         }
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #F8FAFC; /* Fundo claro */
+            background-color: #F8FAFC; 
         }
         .theme-bg-primary { background-color: var(--theme-color-primary); }
         .theme-bg-secondary { background-color: var(--theme-color-secondary); }
         .theme-text-primary { color: var(--theme-color-primary); }
-        .theme-text-accent { color: var(--theme-text-primary); } /* Usando a mesma cor primária para o acento no tema inicial */
+        .theme-text-accent { color: var(--theme-text-primary); } 
         .theme-border-primary { border-color: var(--theme-color-primary); }
         .theme-ring-primary:focus { --tw-ring-color: var(--theme-color-primary); }
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
-        .chart-container { /* Estilos para o container do gráfico */
+        .chart-container { 
             position: relative;
             width: 100%;
-            max-width: 300px; /* Largura máxima para o gráfico */
+            max-width: 280px; /* Ajustado para melhor visualização em card único */
             margin-left: auto;
             margin-right: auto;
-            height: 300px; /* Altura base, pode ser ajustada com Tailwind para responsividade */
-            max-height: 300px; /* Altura máxima */
+            height: 280px; 
+            max-height: 280px; 
         }
     </style>
 </head>
@@ -127,10 +127,10 @@
             <div class="container mx-auto px-6">
                 <div class="text-center mb-12">
                     <h2 class="text-3xl font-bold">Monitor de Hábitos Saudáveis</h2>
-                    <p class="mt-2 text-gray-600">Acompanhe suas metas diárias e construa uma rotina mais saudável. Esta é uma simulação de como o recurso funcionaria no app.</p>
+                    <p class="mt-2 text-gray-600">Acompanhe sua meta diária de ingestão de água.</p>
                 </div>
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                    <div class="bg-white p-6 rounded-2xl shadow text-center">
+                <div class="flex justify-center">
+                    <div class="bg-white p-6 rounded-2xl shadow text-center w-full max-w-md">
                         <h3 class="font-bold text-lg">💧 Ingestão de Água</h3>
                         <div class="chart-container my-4">
                             <canvas id="water-chart"></canvas>
@@ -140,21 +140,6 @@
                             <button id="decrease-water" class="w-10 h-10 bg-red-100 text-red-600 rounded-full font-bold text-xl">-</button>
                             <button id="increase-water" class="w-10 h-10 bg-blue-100 text-blue-600 rounded-full font-bold text-xl">+</button>
                         </div>
-                    </div>
-                    <div class="bg-white p-6 rounded-2xl shadow text-center flex flex-col justify-center">
-                        <h3 class="font-bold text-lg">🏃 Atividade Física</h3>
-                        <p class="text-4xl font-bold text-green-600 my-8">35<span class="text-xl"> min</span></p>
-                        <p class="text-gray-500">Meta: 30 min/dia</p>
-                    </div>
-                    <div class="bg-white p-6 rounded-2xl shadow text-center flex flex-col justify-center">
-                        <h3 class="font-bold text-lg">💊 Medicamentos</h3>
-                        <p class="text-4xl font-bold text-yellow-600 my-8">✅</p>
-                        <p class="text-gray-500">Remédio das 8h tomado</p>
-                    </div>
-                     <div class="bg-white p-6 rounded-2xl shadow text-center flex flex-col justify-center">
-                        <h3 class="font-bold text-lg">🌙 Horas de Sono</h3>
-                        <p class="text-4xl font-bold text-indigo-600 my-8">7h 30m</p>
-                        <p class="text-gray-500">Meta: 8h</p>
                     </div>
                 </div>
             </div>
@@ -246,4 +231,14 @@
         <div class="container mx-auto px-6 text-center">
             <p class="font-bold text-lg">🌈 Aplicativo Arco-Íris da Saúde</p>
             <p class="mt-2 text-sm text-gray-400">Um projeto social para a saúde e bem-estar da comunidade.</p>
-        </
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const campaigns = [
+                { name: 'Janeiro Branco', theme: 'Saúde Mental', primary: '#A855F7', secondary: '#F3E8FF', text: '#7E22CE', desc: 'Dedicado à conscientização sobre a saúde mental e emocional.', tips: ['Converse sobre seus sentimentos.', 'Procure ajuda profissional.', 'Pratique atividades prazerosas.', 'Mantenha uma rotina de sono regular.'] },
+                { name: 'Fevereiro Roxo', theme: 'Lúpus, Fibromialgia, Alzheimer', primary: '#D946EF', secondary: '#FAE8FF', text: '#A21CAF', desc: 'Conscientização sobre doenças crônicas como Lúpus, Fibromialgia e Mal de Alzheimer.', tips: ['Siga o tratamento médico rigorosamente.', 'Busque grupos de apoio.', 'Informe-se sobre sua condição.', 'Adote um estilo de vida saudável.'] },
+                { name: 'Março Azul-Marinho', theme: 'Câncer Colorretal', primary: '#3B82F6', secondary: '#DBEAFE', text: '#1E40AF', desc: 'Prevenção e combate ao câncer colorretal (intestino).', tips: ['Mantenha uma dieta rica em fibras.', 'Pratique atividade física regularmente.', 'Evite o consumo excessivo de álcool.', 'Realize exames preventivos a partir dos 45 anos.'] },
+                { name: 'Abril Azul', theme: 'Autismo', primary: '#0EA5E9', secondary: '#E0F2FE', text: '#0369A1', desc: 'Conscientização sobre o Transtorno do Espectro Autista (TEA).', tips: ['Promova a inclusão e o respeito.', 'Informe-se sobre o autismo para combater o preconceito.', 'Ofereça apoio às famílias.', 'Estimule a autonomia e o desenvolvimento.'] },
+                { name: 'Mai
