@@ -225,3 +225,155 @@
                 { name: 'Outubro Rosa', theme: 'Câncer de Mama', primary: '#EC4899', secondary: '#FCE7F3', text: '#BE185D', desc: 'Conscientização sobre a prevenção e diagnóstico precoce do câncer de mama.', tips: ['Faça o autoexame mensalmente.', 'Realize a mamografia anualmente a partir dos 40 anos.', 'Mantenha um estilo de vida saudável.', 'Conheça o histórico de saúde da sua família.'] },
                 { name: 'Novembro Azul', theme: 'Câncer de Próstata', primary: '#3B82F6', secondary: '#DBEAFE', text: '#1E40AF', desc: 'Conscientização sobre a saúde do homem, com foco no câncer de próstata.', tips: ['Realize o exame de toque e PSA anualmente a partir dos 45 anos.', 'Converse com seu médico sobre os riscos.', 'Adote hábitos saudáveis.', 'Esteja atento aos sinais do seu corpo.'] },
                 { name: 'Dezembro Laranja', theme: 'Câncer de Pele', primary: '#F97316', secondary: '#FFEDD5', text: '#C2410C', desc: 'Prevenção e combate ao câncer de pele, o tipo mais comum no Brasil.', tips: ['Use protetor solar diariamente.', 'Evite a exposição solar entre 10h e 16h.', 'Use chapéus e roupas
+                                                                                                                                                                                                                                ]; // Este é o final do array campaigns que você já colou
+
+            const root = document.documentElement;
+            const campaignTitleEl = document.getElementById('campaign-title');
+            const campaignDescriptionEl = document.getElementById('campaign-description');
+            const campaignTipsEl = document.getElementById('campaign-tips');
+            const heroCampaignNameEl = document.getElementById('hero-campaign-name');
+            const heroCampaignThemeEl = document.getElementById('hero-campaign-theme');
+            const monthSelectors = document.querySelectorAll('.month-selector');
+            const heroSectionEl = document.getElementById('hero'); 
+            const campaignContentWrapperEl = document.getElementById('campaign-content-wrapper');
+
+            function updateCampaign(monthIndex) {
+                if (monthIndex < 0 || monthIndex >= campaigns.length) {
+                    // console.warn("Índice do mês inválido:", monthIndex);
+                    return;
+                }
+                const campaign = campaigns[monthIndex];
+
+                root.style.setProperty('--theme-color-primary', campaign.primary);
+                root.style.setProperty('--theme-color-secondary', campaign.secondary);
+                root.style.setProperty('--theme-text-primary', campaign.text);
+                
+                if(heroSectionEl) heroSectionEl.style.backgroundColor = campaign.secondary; 
+                if(campaignContentWrapperEl) campaignContentWrapperEl.style.backgroundColor = campaign.secondary; 
+
+
+                if (campaignTitleEl) campaignTitleEl.textContent = campaign.name;
+                if (campaignDescriptionEl) campaignDescriptionEl.textContent = campaign.desc;
+                if (campaignTipsEl) campaignTipsEl.innerHTML = campaign.tips.map(tip => `<li>${tip}</li>`).join('');
+                
+                if (heroCampaignNameEl) heroCampaignNameEl.textContent = campaign.name;
+                if (heroCampaignThemeEl) heroCampaignThemeEl.textContent = campaign.theme;
+
+                monthSelectors.forEach((btn, index) => {
+                    if (index === monthIndex) {
+                        btn.classList.add('theme-bg-primary', 'text-white', 'shadow-md');
+                        btn.classList.remove('bg-gray-200', 'text-gray-700');
+                    } else {
+                        btn.classList.remove('theme-bg-primary', 'text-white', 'shadow-md');
+                        btn.classList.add('bg-gray-200', 'text-gray-700');
+                    }
+                });
+            }
+
+            monthSelectors.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const monthIndex = parseInt(e.target.dataset.month);
+                    updateCampaign(monthIndex);
+                });
+            });
+            
+            const currentMonth = new Date().getMonth();
+            updateCampaign(currentMonth); 
+
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+
+            if (mobileMenuButton && mobileMenu) {
+                mobileMenuButton.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                });
+
+                const mobileNavLinks = mobileMenu.querySelectorAll('a.nav-link-mobile');
+                mobileNavLinks.forEach(link => {
+                    link.addEventListener('click', () => {
+                        mobileMenu.classList.add('hidden');
+                    });
+                });
+            }
+            
+            const waterAmountEl = document.getElementById('water-amount');
+            const waterGoal = 2.0;
+            let currentWater = 1.0;
+            const waterChartCanvas = document.getElementById('water-chart');
+            let waterChart = null;
+
+            if (waterChartCanvas && waterAmountEl && typeof Chart !== 'undefined') {
+                try {
+                    const waterCtx = waterChartCanvas.getContext('2d');
+                    waterChart = new Chart(waterCtx, {
+                        type: 'doughnut',
+                        data: {
+                            labels: ['Bebido', 'Faltando'],
+                            datasets: [{
+                                data: [currentWater, waterGoal - currentWater],
+                                backgroundColor: ['#3B82F6', '#E5E7EB'],
+                                borderWidth: 0,
+                                cutout: '75%'
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: { legend: { display: false }, tooltip: { enabled: false } },
+                            animation: { animateScale: true, animateRotate: true }
+                        }
+                    });
+                } catch (e) {
+                    // console.error("Erro ao criar gráfico:", e);
+                }
+            }
+
+            function updateWaterChartDisplay() {
+                if (!waterChart || !waterAmountEl) return;
+                currentWater = Math.max(0, Math.min(waterGoal, currentWater));
+                waterAmountEl.textContent = currentWater.toFixed(1);
+                waterChart.data.datasets[0].data = [currentWater, Math.max(0, waterGoal - currentWater)];
+                waterChart.update();
+            }
+            
+            const increaseWaterButton = document.getElementById('increase-water');
+            const decreaseWaterButton = document.getElementById('decrease-water');
+
+            if (increaseWaterButton) {
+                increaseWaterButton.addEventListener('click', () => {
+                    currentWater += 0.2;
+                    updateWaterChartDisplay();
+                });
+            }
+            if (decreaseWaterButton) {
+                decreaseWaterButton.addEventListener('click', () => {
+                    currentWater -= 0.2;
+                    updateWaterChartDisplay();
+                });
+            }
+            
+            if (waterChart) { 
+                updateWaterChartDisplay(); 
+            }
+
+            const calendarMonthYear = document.getElementById('calendar-month-year');
+            if (calendarMonthYear) {
+                const nowCal = new Date();
+                const monthNamesCal = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+                calendarMonthYear.textContent = `${monthNamesCal[nowCal.getMonth()]} ${nowCal.getFullYear()}`;
+            }
+            
+            document.querySelectorAll('a.nav-link, a.nav-link-mobile').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                         targetElement.scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
