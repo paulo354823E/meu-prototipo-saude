@@ -7,17 +7,16 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Chosen Palette: Calm Harmony with Rainbow Accents -->
-    <!-- Application Structure Plan: A single-page, scrollable dashboard/hub design that acts as an interactive prototype for the mobile app concept. The structure flows from a general introduction (Home) to specific features (Campaign, Habit Tracker, Quiz, Events, Help), mimicking an app's user journey. A sticky navigation bar with smooth scrolling allows easy access to all sections. This structure was chosen to make the abstract proposal tangible and allow stakeholders to 'feel' the app's core ideas in a dynamic, easy-to-understand web format. -->
+    <!-- Application Structure Plan: Single-page, scrollable hub. Sections: Home, Campaigns (interactive month selection), Habit Tracker (Water only, interactive), Events, Help. Sticky nav. Goal: Tangible prototype. -->
     <!-- Visualization & Content Choices: 
-        - Report Info: Monthly Health Campaigns -> Goal: Inform/Explore -> Viz/Method: Interactive content block with a month selector. -> Interaction: Clicking a month (HTML buttons) uses JS to dynamically change the section's theme color, title, and descriptive text. -> Justification: This is the core concept of the app, and making it interactive is crucial for demonstrating the dynamic, thematic nature.
-        - Report Info: Habit Tracker (Water Only) -> Goal: Demonstrate Functionality -> Viz/Method: Chart.js Donut Chart for water intake. -> Interaction: JS-powered '+' and '-' buttons update the chart and text values in real-time. -> Justification: Visually represents the tracking feature. Library: Chart.js (Canvas).
-        - Report Info: Interactive Quiz -> Goal: Demonstrate Interactivity -> Viz/Method: Styled HTML buttons for multiple-choice answers. -> Interaction: JS adds 'correct'/'incorrect' CSS classes on click and reveals a feedback message. -> Justification: A simple yet effective way to prototype the quiz feature.
-        - Report Info: Calendar/Support -> Goal: Organize/Inform -> Viz/Method: Clean layouts using Tailwind CSS Grid and Flexbox. -> Interaction: None needed, focus is on clear, readable presentation of information.
+        - Monthly Campaigns: JS updates theme color, title, text on month button click. Core app concept.
+        - Habit Tracker (Water): Chart.js Donut. JS buttons update chart/text. Visual & interactive.
+        - Events/Help: Static info, clean Tailwind layout.
     -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
         :root {
-            --theme-color-primary: #EF4444;
+            --theme-color-primary: #EF4444; /* Cor inicial (Junho Vermelho como padrão no JS) */
             --theme-color-secondary: #FEE2E2;
             --theme-text-primary: #B91C1C;
         }
@@ -35,7 +34,7 @@
         .chart-container { 
             position: relative;
             width: 100%;
-            max-width: 280px; /* Ajustado para melhor visualização em card único */
+            max-width: 280px; 
             margin-left: auto;
             margin-right: auto;
             height: 280px; 
@@ -51,11 +50,10 @@
                 🌈 Arco-Íris da Saúde
             </a>
             <div class="hidden md:flex space-x-6 items-center">
-                <a href="#campanha" class="text-gray-600 hover:theme-text-primary transition-colors">Campanhas</a>
-                <a href="#cuide-se" class="text-gray-600 hover:theme-text-primary transition-colors">Cuide-se</a>
-                <a href="#quiz" class="text-gray-600 hover:theme-text-primary transition-colors">Quiz</a>
-                <a href="#eventos" class="text-gray-600 hover:theme-text-primary transition-colors">Eventos</a>
-                <a href="#ajuda" class="text-gray-600 hover:theme-text-primary transition-colors">Ajuda</a>
+                <a href="#campanha" class="nav-link text-gray-600 hover:theme-text-primary transition-colors">Campanhas</a>
+                <a href="#cuide-se" class="nav-link text-gray-600 hover:theme-text-primary transition-colors">Cuide-se</a>
+                <a href="#eventos" class="nav-link text-gray-600 hover:theme-text-primary transition-colors">Eventos</a>
+                <a href="#ajuda" class="nav-link text-gray-600 hover:theme-text-primary transition-colors">Ajuda</a>
             </div>
             <button id="mobile-menu-button" class="md:hidden p-2 rounded-md text-gray-600 hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-inset theme-ring-primary">
                 <span class="sr-only">Abrir menu</span>
@@ -64,23 +62,22 @@
                 <div class="w-6 h-0.5 bg-gray-600 my-1"></div>
             </button>
         </nav>
-        <div id="mobile-menu" class="hidden md:hidden">
-            <a href="#campanha" class="block py-2 px-6 text-sm text-gray-700 hover:bg-gray-100">Campanhas</a>
-            <a href="#cuide-se" class="block py-2 px-6 text-sm text-gray-700 hover:bg-gray-100">Cuide-se</a>
-            <a href="#quiz" class="block py-2 px-6 text-sm text-gray-700 hover:bg-gray-100">Quiz</a>
-            <a href="#eventos" class="block py-2 px-6 text-sm text-gray-700 hover:bg-gray-100">Eventos</a>
-            <a href="#ajuda" class="block py-2 px-6 text-sm text-gray-700 hover:bg-gray-100">Ajuda</a>
+        <div id="mobile-menu" class="hidden md:hidden bg-white shadow-md">
+            <a href="#campanha" class="nav-link-mobile block py-2 px-6 text-sm text-gray-700 hover:bg-gray-100 hover:theme-text-primary">Campanhas</a>
+            <a href="#cuide-se" class="nav-link-mobile block py-2 px-6 text-sm text-gray-700 hover:bg-gray-100 hover:theme-text-primary">Cuide-se</a>
+            <a href="#eventos" class="nav-link-mobile block py-2 px-6 text-sm text-gray-700 hover:bg-gray-100 hover:theme-text-primary">Eventos</a>
+            <a href="#ajuda" class="nav-link-mobile block py-2 px-6 text-sm text-gray-700 hover:bg-gray-100 hover:theme-text-primary">Ajuda</a>
         </div>
     </header>
 
     <main>
-        <section class="py-20 md:py-28 theme-bg-secondary transition-colors duration-500">
+        <section id="hero" class="py-20 md:py-28 theme-bg-secondary transition-colors duration-500">
             <div class="container mx-auto px-6 text-center">
                 <h1 class="text-4xl md:text-6xl font-bold theme-text-accent transition-colors duration-500">Bem-vindo ao Arco-Íris da Saúde</h1>
                 <p class="mt-4 text-lg text-gray-600 max-w-3xl mx-auto">Sua jornada para uma vida mais saudável começa aqui. Promovemos a conscientização sobre saúde e bem-estar de forma acessível, educativa e contínua.</p>
                 <div id="hero-campaign-info" class="mt-8">
-                    <p class="font-semibold theme-text-primary text-xl transition-colors duration-500">Campanha do Mês: <span id="hero-campaign-name">Janeiro Branco</span></p>
-                    <p class="text-gray-600"><span id="hero-campaign-theme">Cuidar da mente é cuidar da vida.</span></p>
+                    <p class="font-semibold theme-text-primary text-xl transition-colors duration-500">Campanha do Mês: <span id="hero-campaign-name">Carregando...</span></p>
+                    <p class="text-gray-600"><span id="hero-campaign-theme">Carregando...</span></p>
                 </div>
             </div>
         </section>
@@ -107,16 +104,13 @@
                     <button class="month-selector text-sm font-semibold py-2 px-4 rounded-full transition-all duration-300" data-month="11">Dez</button>
                 </div>
 
-                <div id="campaign-content" class="theme-bg-secondary p-8 rounded-2xl shadow-lg transition-colors duration-500">
-                    <h3 id="campaign-title" class="text-2xl font-bold theme-text-accent transition-colors duration-500">Janeiro Branco</h3>
-                    <p id="campaign-description" class="mt-2 text-gray-700">O Janeiro Branco é dedicado à conscientização sobre a saúde mental e emocional, buscando desmistificar o cuidado com a mente e promover o bem-estar psicológico.</p>
+                <div id="campaign-content-wrapper" class="theme-bg-secondary p-8 rounded-2xl shadow-lg transition-colors duration-500">
+                    <h3 id="campaign-title" class="text-2xl font-bold theme-text-accent transition-colors duration-500">Carregando...</h3>
+                    <p id="campaign-description" class="mt-2 text-gray-700">Carregando...</p>
                     <div class="mt-6 border-t pt-6 theme-border-primary transition-colors duration-500">
                         <h4 class="font-bold theme-text-primary text-lg transition-colors duration-500">Dicas de Prevenção e Cuidado:</h4>
                         <ul id="campaign-tips" class="mt-4 list-disc list-inside text-gray-600 space-y-2">
-                            <li>Converse sobre seus sentimentos.</li>
-                            <li>Procure ajuda profissional quando sentir necessidade.</li>
-                            <li>Pratique atividades que lhe dão prazer.</li>
-                            <li>Mantenha uma rotina de sono regular.</li>
+                            <li>Carregando...</li>
                         </ul>
                     </div>
                 </div>
@@ -145,35 +139,17 @@
             </div>
         </section>
 
-        <section id="quiz" class="py-20">
-            <div class="container mx-auto px-6 max-w-2xl">
-                <div class="text-center mb-12">
-                    <h2 class="text-3xl font-bold">Teste Seus Conhecimentos</h2>
-                    <p class="mt-2 text-gray-600">Participe do nosso quiz mensal e aprenda sobre saúde de forma divertida. Esta é uma demonstração de uma pergunta.</p>
-                </div>
-                <div class="bg-white p-8 rounded-2xl shadow-lg">
-                    <p class="font-bold text-lg mb-4" id="quiz-question-title">Pergunta sobre a campanha do mês...</p>
-                    <div id="quiz-options" class="space-y-3">
-                        <button class="quiz-option w-full text-left p-4 border rounded-lg hover:bg-gray-100 transition">Opção A</button>
-                        <button class="quiz-option w-full text-left p-4 border rounded-lg hover:bg-gray-100 transition" data-correct="true">Opção B (Correta)</button>
-                        <button class="quiz-option w-full text-left p-4 border rounded-lg hover:bg-gray-100 transition">Opção C</button>
-                    </div>
-                    <p id="quiz-feedback" class="mt-4 font-bold text-center h-6"></p>
-                </div>
-            </div>
-        </section>
-
         <section id="eventos" class="py-20 bg-gray-50">
             <div class="container mx-auto px-6">
                 <div class="text-center mb-12">
                     <h2 class="text-3xl font-bold">Calendário de Eventos Comunitários</h2>
-                    <p class="mt-2 text-gray-600">Fique por dentro das ações de saúde na sua comunidade.</p>
+                    <p class="mt-2 text-gray-600">Fique por dentro das ações de saúde na sua comunidade. (Visualização apenas)</p>
                 </div>
                 <div class="bg-white p-6 rounded-2xl shadow-lg">
                     <div class="flex items-center justify-between pb-4 border-b">
-                        <button class="p-2 rounded-full hover:bg-gray-100">◀</button>
+                        <button class="p-2 rounded-full hover:bg-gray-100 opacity-50 cursor-not-allowed">◀</button>
                         <h3 class="text-xl font-bold" id="calendar-month-year">Junho 2025</h3>
-                        <button class="p-2 rounded-full hover:bg-gray-100">▶</button>
+                        <button class="p-2 rounded-full hover:bg-gray-100 opacity-50 cursor-not-allowed">▶</button>
                     </div>
                     <div class="grid grid-cols-7 gap-2 text-center font-semibold text-gray-500 mt-4">
                         <div>Dom</div><div>Seg</div><div>Ter</div><div>Qua</div><div>Qui</div><div>Sex</div><div>Sáb</div>
@@ -241,4 +217,11 @@
                 { name: 'Fevereiro Roxo', theme: 'Lúpus, Fibromialgia, Alzheimer', primary: '#D946EF', secondary: '#FAE8FF', text: '#A21CAF', desc: 'Conscientização sobre doenças crônicas como Lúpus, Fibromialgia e Mal de Alzheimer.', tips: ['Siga o tratamento médico rigorosamente.', 'Busque grupos de apoio.', 'Informe-se sobre sua condição.', 'Adote um estilo de vida saudável.'] },
                 { name: 'Março Azul-Marinho', theme: 'Câncer Colorretal', primary: '#3B82F6', secondary: '#DBEAFE', text: '#1E40AF', desc: 'Prevenção e combate ao câncer colorretal (intestino).', tips: ['Mantenha uma dieta rica em fibras.', 'Pratique atividade física regularmente.', 'Evite o consumo excessivo de álcool.', 'Realize exames preventivos a partir dos 45 anos.'] },
                 { name: 'Abril Azul', theme: 'Autismo', primary: '#0EA5E9', secondary: '#E0F2FE', text: '#0369A1', desc: 'Conscientização sobre o Transtorno do Espectro Autista (TEA).', tips: ['Promova a inclusão e o respeito.', 'Informe-se sobre o autismo para combater o preconceito.', 'Ofereça apoio às famílias.', 'Estimule a autonomia e o desenvolvimento.'] },
-                { name: 'Mai
+                { name: 'Maio Amarelo', theme: 'Segurança no Trânsito', primary: '#FACC15', secondary: '#FEF9C3', text: '#A16207', desc: 'Conscientização para a redução de acidentes de trânsito.', tips: ['Respeite os limites de velocidade.', 'Se beber, não dirija.', 'Use sempre o cinto de segurança.', 'Seja consciente como pedestre e ciclista.'] },
+                { name: 'Junho Vermelho', theme: 'Doação de Sangue', primary: '#EF4444', secondary: '#FEE2E2', text: '#B91C1C', desc: 'Incentivo à doação de sangue, um gesto que salva vidas.', tips: ['Verifique se você atende aos requisitos para doar.', 'Hidrate-se bem antes e depois da doação.', 'Procure o hemocentro mais próximo.', 'Doe sangue regularmente.'] },
+                { name: 'Julho Amarelo', theme: 'Hepatites Virais', primary: '#EAB308', secondary: '#FEFCE8', text: '#854D0E', desc: 'Prevenção e combate às hepatites virais.', tips: ['Vacine-se contra a hepatite B.', 'Use preservativo em relações sexuais.', 'Não compartilhe objetos de uso pessoal.', 'Faça o teste para saber seu diagnóstico.'] },
+                { name: 'Agosto Dourado', theme: 'Amamentação', primary: '#F59E0B', secondary: '#FFFBEB', text: '#B45309', desc: 'Incentivo ao aleitamento materno, alimento de ouro para os bebês.', tips: ['Amamente na primeira hora de vida.', 'Ofereça o leite materno exclusivamente até os 6 meses.', 'Procure um banco de leite humano se precisar.', 'Busque apoio e orientação profissional.'] },
+                { name: 'Setembro Amarelo', theme: 'Prevenção ao Suicídio', primary: '#FCD34D', secondary: '#FFFBEB', text: '#B45309', desc: 'Conscientização sobre a prevenção ao suicídio e a importância de falar sobre o assunto.', tips: ['Falar é a melhor solução.', 'Ofereça ajuda e escuta sem julgamentos.', 'Procure o CVV (Ligue 188).', 'O cuidado com a saúde mental é essencial.'] },
+                { name: 'Outubro Rosa', theme: 'Câncer de Mama', primary: '#EC4899', secondary: '#FCE7F3', text: '#BE185D', desc: 'Conscientização sobre a prevenção e diagnóstico precoce do câncer de mama.', tips: ['Faça o autoexame mensalmente.', 'Realize a mamografia anualmente a partir dos 40 anos.', 'Mantenha um estilo de vida saudável.', 'Conheça o histórico de saúde da sua família.'] },
+                { name: 'Novembro Azul', theme: 'Câncer de Próstata', primary: '#3B82F6', secondary: '#DBEAFE', text: '#1E40AF', desc: 'Conscientização sobre a saúde do homem, com foco no câncer de próstata.', tips: ['Realize o exame de toque e PSA anualmente a partir dos 45 anos.', 'Converse com seu médico sobre os riscos.', 'Adote hábitos saudáveis.', 'Esteja atento aos sinais do seu corpo.'] },
+                { name: 'Dezembro Laranja', theme: 'Câncer de Pele', primary: '#F97316', secondary: '#FFEDD5', text: '#C2410C', desc: 'Prevenção e combate ao câncer de pele, o tipo mais comum no Brasil.', tips: ['Use protetor solar diariamente.', 'Evite a exposição solar entre 10h e 16h.', 'Use chapéus e roupas
